@@ -5,7 +5,7 @@ local function check_member_super(cb_extra, success, result)
   local data = cb_extra.data
   local msg = cb_extra.msg
   if success == 0 then
-	send_large_msg(receiver, "Promote me to admin first!")
+	send_large_msg(receiver, "ابتدا منو ادمین کن")
   end
   for k,v in pairs(result) do
     local member_id = v.peer_id
@@ -53,7 +53,7 @@ local function check_member_super(cb_extra, success, result)
       end
       data[tostring(groups)][tostring(msg.to.id)] = msg.to.id
       save_data(_config.moderation.data, data)
-	  local text = 'SuperGroup has been added!'
+	  local text = '🔥در سوپرگروه ادد شد🔥'
       return reply_msg(msg.id, text, ok_cb, false)
     end
   end
@@ -957,7 +957,7 @@ end
 		end
 	end
   local settings = data[tostring(target)]['settings']
-  local text = "⚙SuperGroup settings⚙\n➖➖➖➖➖➖➖➖➖➖➖\nLock links ➙ "..settings.lock_link.."\nLock flood ➙ "..settings.flood.."\nFlood sensitivity ➙ "..NUM_MSG_MAX.."\nLock spam ➙ "..settings.lock_spam.."\nLock Arabic ➙ "..settings.lock_arabic.."\nLock Member ➙ "..settings.lock_member.."\nLock RTL ➙ "..settings.lock_rtl.."\nLock Tgservice ➙ "..settings.lock_tgservice.."\nLock sticker ➙ "..settings.lock_sticker.."\nLock contacts ➙ "..settings.lock_contacts.."\nLock emoji ➙ "..settings.lock_emoji.."\nLock english ➙ "..settings.lock_english.."\nLock video ➙ "..settings.lock_video.."\nLock photo ➙ "..settings.lock_photo.."\nLock fwd ➙ "..settings.lock_fwd.."\nLock fosh ➙ "..settings.lock_fosh.."\nLock file ➙ "..settings.lock_file.."\nLock audio ➙ "..settings.lock_audio.."\nLock number ➙ "..settings.lock_number.."\nLock hashtag ➙ "..settings.lock_hashtag.."\nLock username ➙ "..settings.lock_username.."\nLock operator ➙ "..settings.lock_operator.."\nLock commands ➙ "..settings.lock_commands.."\nLock bots ➙ "..settings.lock_bots.."\n➖➖➖➖➖➖➖➖➖➖➖\nPublic ➙ "..settings.public.."\nStrict settings ➙ "..settings.strict.."\n\n🌐چنل رسمے پاور اسپید🌐\n🔥@PowerSpeed_ch🔥"
+  local text = "⚙تنظیمات سوپرگروه⚙\n➖➖➖➖➖➖➖➖➖➖➖\nقفل لینک👈 ➙ "..settings.lock_link.."\nقفل پیام پشت سر هم👈"..settings.flood.."\nتنظیمات اسپم "..NUM_MSG_MAX.."\nقفل اسپم "..settings.lock_spam.."\nقفل زبان عریی 👈 "..settings.lock_arabic.."\nقفل ممبر👈 "..settings.lock_member.."\nقفل ار تی ال👈 "..settings.lock_rtl.."\nقفل ییام ورود و خروج افراد👈 "..settings.lock_tgservice.."\nقفل استیکر "..settings.lock_sticker.."\nقفل ارسال اکانت "..settings.lock_contacts.."\nقفل ایموجی "..settings.lock_emoji.."\nقفل زبان انگلیسی 👈"..settings.lock_english.."\nقفل ویدیو👈 "..settings.lock_video.."\nقفل عکس👈 "..settings.lock_photo.."\nقفل فوروارد👈 "..settings.lock_fwd.."\nقفل فحش👈 "..settings.lock_fosh.."\nقفل فایل👈 "..settings.lock_file.."\nقفل موسیقی👈 "..settings.lock_audio.."\nقفل اعداد👈 "..settings.lock_number.."\nقفل هشتگ👈 "..settings.lock_hashtag.."\nقفل یوزرنیم👈 "..settings.lock_username.."\nقفل شارژسیم کارت👈 "..settings.lock_operator.."\nقفل دستورات👈 "..settings.lock_commands.."\nقفل بات👈 "..settings.lock_bots.."\n➖➖➖➖➖➖➖➖➖\nگروه عمومی👈 "..settings.public.."\nتنظیمات سخت گیرانه👈 "..settings.strict.."\n\n🌐چنل رسمے پاور اسپید🌐\n🔥@PowerSpeed_ch🔥"
   return text
 end
 
