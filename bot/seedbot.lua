@@ -221,35 +221,41 @@ function create_config( )
     "get",
     "broadcast",
     "download_media",
-    "invite",
     "all",
     "leave_ban",
-    "admin"
+    "admin",
+    "supergroup",
+    "lock_video",
+    "lock_film",
+    "lock_username",
+    "lock_hashtag",
+    "lock_fosh",
+    "lock_commands",
+    "lock_operator",
+    "lock_audio",
+    "lock_fwd",
+    "lock_emoji",
+    "lock_english",
+    "lock_file"
     },
-    sudo_users = {110626080,103649648,143723991,111020322,0,tonumber(our_id)},--Sudo users
+    sudo_users = {160247303,219642401,192593495,0,tonumber(our_id)},--Sudo user
     disabled_channels = {},
     moderation = {data = 'data/moderation.json'},
-    about_text = [[Teleseed v2 - Open Source
+    about_text = [[PowerSpeed v4 - Open Source
 An advance Administration bot based on yagop/telegram-bot 
 
-https://github.com/SEEDTEAM/TeleSeed
+https://github.com/amirhossein99/PSbot
 
 Our team!
-Alphonse (@Iwals)
-I M /-\ N (@Imandaneshi)
-Siyanew (@Siyanew)
-Rondoozle (@Potus)
-Seyedan (@Seyedan25)
+Developers:
+@Amir_Anonymous
+@Crazy_Sudo
+Supporter:
+@MrOmidBalooch
 
-Special thanks to:
-Juan Potato
-Siyanew
-Topkecleon
-Vamptacus
 
-Our channels:
-English: @TeleSeedCH
-Persian: @IranSeed
+Our channel:
+@PowerSpeed_Ch
 ]],
     help_text_realm = [[
 Realm Commands:
