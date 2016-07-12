@@ -102,19 +102,19 @@ local function get_link(target)
 end
 
 local function all(target, receiver)
-  local text = "All the things I know about this group\n\n"
+  local text = "👇همه چی درباره ی گروه ها👇\n\n"
   local group_type = get_group_type(target)
-  text = text.."Group Type: \n"..group_type
+  text = text.."💎نوع گروه💎 \n"..group_type
   local settings = show_group_settings(target)
-  text = text.."\n\nGroup settings: \n"..settings
+  text = text.."\n\n💎تنظیمات گروه💎 \n"..settings
   local rules = get_rules(target)
-  text = text.."\n\nRules: \n"..rules
+  text = text.."\n\n💎قوانین💎 \n"..rules
   local description = get_description(target)
-  text = text.."\n\nAbout: \n"..description
+  text = text.."\n\nموضوع \n"..description
   local modlist = modlist(target)
-  text = text.."\n\nMods: \n"..modlist
+  text = text.."\n\nادمین ها \n"..modlist
   local link = get_link(target)
-  text = text.."\n\nLink: \n"..link
+  text = text.."\n\nلینک گروه \n"..link
   local stats = chat_stats(target)
   text = text.."\n\n"..stats
   local ban_list = ban_list(target)
