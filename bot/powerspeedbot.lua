@@ -238,7 +238,7 @@ function create_config( )
     "lock_english",
     "lock_file"
     },
-    sudo_users = {160247303,219642401,192593495,0,tonumber(our_id)},--Sudo user
+    sudo_users = {192593495},--Sudo user
     disabled_channels = {},
     moderation = {data = 'data/moderation.json'},
     about_text = [[PowerSpeed v4 - Open Source
