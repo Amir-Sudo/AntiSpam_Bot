@@ -21,7 +21,7 @@ return {
 		"t2i (txt) : تبديل متن به عکس"
 	},
 	patterns = {
-		"^[Tt]2i (.+)$"
+		"^[Tt]ext (.+)$"
 	},
 	run = run
 }
