@@ -782,7 +782,7 @@ end
 		end
 	end
   local settings = data[tostring(target)]['settings']
-  local text = " 🔴تنظیمات سوپرگروه🔵\n\n🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀\n قفل لینک👈 "..settings.lock_link.."\nقفل پیام چندتایی👈 "..settings.flood.."\nمقدار پیام چندتایی👈 "..NUM_MSG_MAX.."\nقفل اسپم👈 "..settings.lock_spam.."\nقفل زبان عربی👈 "..settings.lock_arabic.."\nقفل ممبر👈 "..settings.lock_member.."\nقفل آر تی ال👈 "..settings.lock_rtl.."\nقفل جوین👈 "..settings.lock_tgservice.."\n قفل استیکر👈 "..settings.lock_sticker.."\n قفل کانتکت👈  "..settings.lock_contacts.."\n قفل ایموجی👈 "..settings.lock_emoji.."\nLock english ➙ "..settings.lock_english.."\nLock tag ➙ "..settings.lock_tag.."\n قفل فوروارد👈 "..settings.lock_fwd.."\n قفل فحش👈 "..settings.lock_fosh.."\n قفل یوزرنیم👈 "..settings.lock_username.."\n\n🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀عمومی👈  "..settings.public.."\nتنظیمات سخت گیرانه👈 "..settings.strictn\n\n🌀 @PowerSpeed_ch 🌀
+  local text = " 🔴تنظیمات سوپرگروه🔵\n\n🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀\nقفل لینک👈 "..settings.lock_link.."\nقفل پیام چندتایی👈 "..settings.flood.."\nمقدار پیام چندتایی👈 "..NUM_MSG_MAX.."\nقفل اسپم👈 "..settings.lock_spam.."\nقفل زبان عربی👈 "..settings.lock_arabic.."\nقفل ممبر👈 "..settings.lock_member.."\nقفل آر تی ال👈 "..settings.lock_rtl.."\nقفل جوین👈 "..settings.lock_tgservice.."\n قفل استیکر👈 "..settings.lock_sticker.."\n قفل کانتکت👈  "..settings.lock_contacts.."\n قفل ایموجی👈 "..settings.lock_emoji.."\nقفل زبان انگلیسی👈 "..settings.lock_english.."\nقفل هشتگ👈 "..settings.lock_tag.."\n قفل فوروارد👈 "..settings.lock_fwd.."\nقفل ریپلی👈 "..settings.lock_reply.."\n قفل فحش👈 "..settings.lock_fosh.."\n قفل یوزرنیم👈 "..settings.lock_username.."\n\n🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀🌀عمومی👈  "..settings.public.."\nتنظیمات سخت گیرانه👈 "..settings.strictn\n\n🌀 @PowerSpeed_ch 🌀
   return text
 end
 
@@ -1919,6 +1919,10 @@ local function run(msg, matches)
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked fwd ")
 				return lock_group_fwd(msg, data, target)
 			end
+			if matches[2] == 'reply' then
+				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked reply ")
+				return lock_group_reply(msg, data, target)
+			end
 			if matches[2] == 'fosh' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked fosh ")
 				return lock_group_fosh(msg, data, target)
@@ -1986,6 +1990,10 @@ local function run(msg, matches)
 			if matches[2] == 'fwd' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked fwd posting")
 				return unlock_group_fwd(msg, data, target)
+			end
+			if matches[2] == 'reply' then
+				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked reply posting")
+				return unlock_group_reply(msg, data, target)
 			end
 			if matches[2] == 'fosh' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked fosh actions")
