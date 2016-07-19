@@ -33,6 +33,7 @@ local function check_member_super(cb_extra, success, result)
 		  lock_tag = 'no',
 		  lock_fwd = 'no',
 		  lock_fosh = 'no',
+		  lock_reply = 'no',
 		  lock_username = 'no',
 		  strict = 'no'
         }
@@ -556,17 +557,45 @@ local function unlock_group_fwd(msg, data, target)
   end
 end
 
-local function unlock_group_fosh(msg, data, target)
+local function lock_group_reply(msg, data, target)
   if not is_momod(msg) then
     return
   end
-  local group_fwd_lock = data[tostring(target)]['settings']['lock_fwd']
-  if group_fwd_lock == 'no' then
-    return '🔓قـفـل فـوروارد در سـوپـرگـروه از قـبـل غـیـرفـعـال بـوده🔓'
+  local group_reply_lock = data[tostring(target)]['settings']['lock_reply']
+  if group_reply_lock == 'yes' then
+    return '🔐قـفغـل ریــپلـی در سـوپـرگـروه از قـبـل فـعـال بـود🔒'
   else
-    data[tostring(target)]['settings']['lock_fwd'] = 'no'
+    data[tostring(target)]['settings']['lock_reply'] = 'yes'
     save_data(_config.moderation.data, data)
-    return '🔓قـفـل فـوروارد در سـوپـرگـروه غـیـرفـعـال شـد🔓'
+    return '🔐قـفـل ریــپلـی در سـوپـرگـروه فـعـال شـد🔒'
+  end
+end
+
+local function unlock_group_reply(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_reply_lock = data[tostring(target)]['settings']['lock_reply']
+  if group_reply_lock == 'no' then
+    return '🔓قـفـل ریــپلـی در سـوپـرگـروه از قـبـل غـیـرفـعـال بـود🔓'
+  else
+    data[tostring(target)]['settings']['lock_reply'] = 'no'
+    save_data(_config.moderation.data, data)
+    return '🔓قـفـل ریــپلـی در سـوپـرگـروه غـیـرفـعـال شـد🔓'
+  end
+end
+
+local function lock_group_fosh(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
+  local group_fosh_lock = data[tostring(target)]['settings']['lock_fosh']
+  if group_fosh_lock == 'yes' then
+    return '🔐قـفـل فـحـش در سـوپـرگـروه از قـبـل فـعـال بـود🔒'
+  else
+    data[tostring(target)]['settings']['lock_fosh'] = 'yes'
+    save_data(_config.moderation.data, data)
+    return '🔐قـفـل فـحـش در سـوپـرگـروه فـعـال شـد🔒'
   end
 end
 
