@@ -479,7 +479,7 @@ local function lock_group_english(msg, data, target)
   if not is_momod(msg) then
     return
   end
-  local group_tag_lock = data[tostring(target)]['settings']['lock_english']
+  local group_english_lock = data[tostring(target)]['settings']['lock_english']
   if group_english_lock == 'yes' then
     return '🔐قـفـل انـگـلیـسـے در سـوپـرگـروه از قـبـل فـعـال شـد🔒'
   else
@@ -587,41 +587,41 @@ local function unlock_group_reply(msg, data, target)
   end
 end
 
-local group_reply_lock = data[tostring(target)]['settings']['lock_reply']
+local group_audio_lock = data[tostring(target)]['settings']['lock_audio']
   if group_reply_lock == 'yes' then
     return '🔐قـفـل صــدا در سـوپـرگـروه از قـبـل فـعـال بـود🔒'
   else
-    data[tostring(target)]['settings']['lock_reply'] = 'yes'
+    data[tostring(target)]['settings']['lock_audio'] = 'yes'
     save_data(_config.moderation.data, data)
     return '🔐قـفـل صــدا در سـوپـرگـروه فـعـال شـد🔒'
   end
 end
 
- local group_reply_lock = data[tostring(target)]['settings']['lock_reply']
-  if group_reply_lock == 'no' then
+ local group_audio_lock = data[tostring(target)]['settings']['lock_audio']
+  if group_audio_lock == 'no' then
     return '🔓قـفـل صــدا در سـوپـرگـروه از قـبـل غـیـرفـعـال بـود🔓'
   else
-    data[tostring(target)]['settings']['lock_reply'] = 'no'
+    data[tostring(target)]['settings']['lock_audio'] = 'no'
     save_data(_config.moderation.data, data)
     return '🔓قـفـل صــدا در سـوپـرگـروه غـیـرفـعـال شـد🔓'
   end
 end
 
-local group_tag_lock = data[tostring(target)]['settings']['lock_tag']
-  if group_tag_lock == 'yes' then
+local group_operator_lock = data[tostring(target)]['settings']['lock_operator']
+  if group_operator_lock == 'yes' then
     return '🔐قـفـل اوپـراتـور در سـوپـرگـروه از قـبـل فـعـال بـود🔒'
   else
-    data[tostring(target)]['settings']['lock_tag'] = 'yes'
+    data[tostring(target)]['settings']['lock_operator'] = 'yes'
     save_data(_config.moderation.data, data)
     return '🔐قـفـل اوپـراتـور در سـوپـرگـروه فـعـال شـد🔒'
   end
 end
 
-local group_reply_lock = data[tostring(target)]['settings']['lock_reply']
-  if group_reply_lock == 'no' then
+local group_operator_lock = data[tostring(target)]['settings']['lock_operator']
+  if group_operator_lock == 'no' then
     return '🔓قـفـل اوپـراتـور در سـوپـرگـروه از قـبـل غـیـرفـعـال بـود🔓'
   else
-    data[tostring(target)]['settings']['lock_reply'] = 'no'
+    data[tostring(target)]['settings']['lock_operator'] = 'no'
     save_data(_config.moderation.data, data)
     return '🔓قـفـل اوپـراتـور در سـوپـرگـروه غـیـرفـعـال شـد🔓'
   end
