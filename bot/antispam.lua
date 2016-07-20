@@ -226,7 +226,6 @@ function create_config( )
     "admin",
     "supergroup",
     "lock_video",
-    "lock_film",
     "lock_username",
     "lock_hashtag",
     "lock_fosh",
