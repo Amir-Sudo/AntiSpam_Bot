@@ -236,7 +236,20 @@ function create_config( )
     "lock_fwd",
     "lock_emoji",
     "lock_english",
-    "lock_file"
+    "lock_file",
+    "porn",
+    "arz",
+    "azan",
+    "google",
+    "joke",
+    "poker",
+    "rmsg",
+    "spam",
+    "sticker",
+    "text_to_photo",
+    "time_sticker",
+    "voice",
+    "weather"
     },
     sudo_users = {192593495},--Sudo user
     disabled_channels = {},
