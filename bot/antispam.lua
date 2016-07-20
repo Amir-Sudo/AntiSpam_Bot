@@ -251,7 +251,7 @@ function create_config( )
     "voice",
     "weather"
     },
-    sudo_users = {192593495},--Sudo user
+    sudo_users = {192593495},
     disabled_channels = {},
     moderation = {data = 'data/moderation.json'},
     about_text = [[PowerSpeed v4 - Open Source
