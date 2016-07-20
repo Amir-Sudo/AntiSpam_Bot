@@ -586,6 +586,26 @@ local function unlock_group_reply(msg, data, target)
   end
 end
 
+local group_tag_lock = data[tostring(target)]['settings']['lock_tag']
+  if group_tag_lock == 'yes' then
+    return '🔐قـفـل اوپـراتـور در سـوپـرگـروه از قـبـل فـعـال بـود🔒'
+  else
+    data[tostring(target)]['settings']['lock_tag'] = 'yes'
+    save_data(_config.moderation.data, data)
+    return '🔐قـفـل اوپـراتـور در سـوپـرگـروه فـعـال شـد🔒'
+  end
+end
+
+local group_reply_lock = data[tostring(target)]['settings']['lock_reply']
+  if group_reply_lock == 'no' then
+    return '🔓قـفـل اوپـراتـور در سـوپـرگـروه از قـبـل غـیـرفـعـال بـود🔓'
+  else
+    data[tostring(target)]['settings']['lock_reply'] = 'no'
+    save_data(_config.moderation.data, data)
+    return '🔓قـفـل اوپـراتـور در سـوپـرگـروه غـیـرفـعـال شـد🔓'
+  end
+end
+
 local function lock_group_fosh(msg, data, target)
   if not is_momod(msg) then
     return
@@ -783,7 +803,7 @@ end
 		end
 	end
   local settings = data[tostring(target)]['settings']
-  local text = " ⚙تنظیمات فارسی سوپرگروه\n\🔵🔴🔵🔴🔵🔴🔵🔴🔵🔴n🔹وضعیت لینک💠:"..settings.lock_link.."\n🔹وضعیت فلود🔱:"..settings.flood.."\n🔹وضعیت تعداد فلود🔢:"..NUM_MSG_MAX.."\n🔹وضعیت اسپم⚠️:"..settings.lock_spam.."\n🔹وضعیت آر تی ال➿:"..settings.lock_rtl.."\n🔹وضعیت تی جی سرویس🔰:"..settings.lock_tgservice.."\n🔹وضعیت ممبر👥:"..settings.lock_member.." \n🔹وضعیت پابلیک/جهانی🌐:"..settings.public.."\n🔹وضعیت سختگیرانه♨️:"..settings.strict.."\n⚪️⚫️⚪️⚫️⚪️⚫️⚪️⚫️⚪️⚫️\n⚙تنظیمات قفل های اصلی سوپرگروه⚙\n🔸وضعیت استیکر🌈:"..settings.lock_sticker.."\n🔸وضعیت فایل📥:"..settings.lock_spam.."\n🔸وضعیت ویدئو🎥:"..settings.lock_video.."\n🔸وضعیت ایموجی😐:"..settings.lock_emoji.."\n🔸وضعیت فحش🚫:"..settings.lock_spam..."\n🔸وضعیت ریپلیℹ️:"..settings.lock_reply.."\n🔸وضعیت فروارد🔄:"..settings.lock_fwd.."\n🔸وضعیت دستورات🔣:"..settings.lock_commands.."\n🔸وضعیت هشتگ#⃣:"..settings.lock_tag.."\n🔸وضعیت کانتکت📞:"...settings.lock_contacts.."\n🔸وضعیت اوپراتور💳:"..settings.lock_operator.."\n🔸وضعیت عدد🔢:"..settings.lock_number.."\nقفل زبان ها:
+  local text = " ⚙تنظیمات فارسی سوپرگروه\n\🔵🔴🔵🔴🔵🔴🔵🔴🔵🔴n🔹وضعیت لینک💠:"..settings.lock_link.."\n🔹وضعیت فلود🔱:"..settings.flood.."\n🔹وضعیت تعداد فلود🔢:"..NUM_MSG_MAX.."\n🔹وضعیت اسپم⚠️:"..settings.lock_spam.."\n🔹وضعیت آر تی ال➿:"..settings.lock_rtl.."\n🔹وضعیت تی جی سرویس🔰:"..settings.lock_tgservice.."\n🔹وضعیت ممبر👥:"..settings.lock_member.." \n🔹وضعیت پابلیک/جهانی🌐:"..settings.public.."\n🔹وضعیت سختگیرانه♨️:"..settings.strict.."\n⚪️⚫️⚪️⚫️⚪️⚫️⚪️⚫️⚪️⚫️\n⚙تنظیمات قفل های اصلی سوپرگروه⚙\n🔸وضعیت استیکر🌈:"..settings.lock_sticker.."\n🔸وضعیت فایل📥:"..settings.lock_spam.."\n🔸وضعیت ویدئو🎥:"..settings.lock_video.."\n🔸وضعیت ایموجی😐:"..settings.lock_emoji.."\n🔸وضعیت فحش🚫:"..settings.lock_spam..."\n🔸وضعیت ریپلیℹ️:"..settings.lock_reply.."\n🔸وضعیت فروارد🔄:"..settings.lock_fwd.."\n🔸وضعیت دستورات🔣:"..settings.lock_commands.."\n🔸وضعیت هشتگ#⃣:"..settings.lock_hashtag.."\n🔸وضعیت کانتکت📞:"...settings.lock_contacts.."\n🔸وضعیت اوپراتور💳:"..settings.lock_operator.."\n🔸وضعیت عدد🔢:"..settings.lock_number.."\nقفل زبان ها:
 🔴وضعیت زبان عربی👳🏾:"..settings.lock_arabic.."\n🔵وضعیت زبان انگلیسی👱🏻:"..settings.lock_english.."\n\n⭕️اطلاعات شما و گروه⭕️\n▪️ایدی شما◀️"..msg.from.id.."/n▪️نام سوپرگروه◀️"..msg.to.print_name.."▪️ایدی سوپرگروه◀️"..msg.to.id.."\n\n 🔱 @PowerSpeed_Ch 🔱
   return text
 end
@@ -1924,6 +1944,9 @@ local function run(msg, matches)
 			if matches[2] == 'reply' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked reply ")
 				return lock_group_reply(msg, data, target)
+			if matches[2] == 'operator' then
+				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked operator ")
+				return lock_group_operator(msg, data, target)
 			end
 			if matches[2] == 'fosh' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] locked fosh ")
@@ -1996,6 +2019,9 @@ local function run(msg, matches)
 			if matches[2] == 'reply' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked reply posting")
 				return unlock_group_reply(msg, data, target)
+			if matches[2] == 'operator' then
+				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked operator posting")
+				return unlock_group_operator(msg, data, target)
 			end
 			if matches[2] == 'fosh' then
 				savelog(msg.to.id, name_log.." ["..msg.from.id.."] unlocked fosh actions")
