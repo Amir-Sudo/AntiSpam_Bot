@@ -34,6 +34,7 @@ local function check_member_super(cb_extra, success, result)
 		  lock_fwd = 'no',
 		  lock_fosh = 'no',
 		  lock_reply = 'no',
+		  lock_operator = 'no',
 		  lock_username = 'no',
 		  strict = 'no'
         }
