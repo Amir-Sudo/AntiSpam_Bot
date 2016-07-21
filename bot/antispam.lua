@@ -4,7 +4,9 @@ package.cpath = package.cpath .. ';.luarocks/lib/lua/5.2/?.so'
 
 require("./bot/utils")
 
-VERSION = '2'
+local f = assert(io.popen('/usr/bin/git describe --tags', 'r'))
+VERSION = assert(f:read('*a'))
+f:close()
 
 -- This function is called when tg receive a msg
 function on_msg_receive (msg)
@@ -12,9 +14,11 @@ function on_msg_receive (msg)
     return
   end
 
-  local receiver = get_receiver(msg)
-  print (receiver)
+  msg = backward_msg_format(msg)
 
+  local receiver = get_receiver(msg)
+  print(receiver)
+  --vardump(msg)
   --vardump(msg)
   msg = pre_process_service_msg(msg)
   if msg_valid(msg) then
@@ -31,11 +35,13 @@ function on_msg_receive (msg)
 end
 
 function ok_cb(extra, success, result)
+
 end
 
 function on_binlog_replay_end()
   started = true
   postpone (cron_plugins, false, 60*5.0)
+  -- See plugins/isup.lua as an example for cron
 
   _config = load_config()
 
@@ -52,7 +58,7 @@ function msg_valid(msg)
   end
 
   -- Before bot was started
-  if msg.date < now then
+  if msg.date < os.time() - 5 then
     print('\27[36mNot valid: old msg\27[39m')
     return false
   end
@@ -83,9 +89,8 @@ function msg_valid(msg)
   end
 
   if msg.from.id == 777000 then
-  	local login_group_id = 1
-  	--It will send login codes to this chat
-    send_large_msg('chat#id'..login_group_id, msg.text)
+    --send_large_msg(*group id*, msg.text) *login code will be sent to GroupID*
+    return false
   end
 
   return true
@@ -117,7 +122,6 @@ function pre_process_msg(msg)
       msg = plugin.pre_process(msg)
     end
   end
-
   return msg
 end
 
@@ -138,7 +142,6 @@ local function is_plugin_disabled_on_chat(plugin_name, receiver)
       if disabled_plugin == plugin_name and disabled then
         local warning = 'Plugin '..disabled_plugin..' is disabled on this chat'
         print(warning)
-        send_msg(receiver, warning, ok_cb, false)
         return true
       end
     end
@@ -198,7 +201,7 @@ function load_config( )
   end
   local config = loadfile ("./data/config.lua")()
   for v,user in pairs(config.sudo_users) do
-    print("Allowed user: " .. user)
+    print("Sudo user: " .. user)
   end
   return config
 end
@@ -226,6 +229,7 @@ function create_config( )
     "admin",
     "supergroup",
     "lock_video",
+    "lock_film",
     "lock_username",
     "lock_hashtag",
     "lock_fosh",
@@ -247,205 +251,309 @@ function create_config( )
     "sticker",
     "text_to_photo",
     "time_sticker",
-    "voice",
-    "weather"
     },
     sudo_users = {192593495},
-    disabled_channels = {},
     moderation = {data = 'data/moderation.json'},
-    about_text = [[PowerSpeed v4 - Open Source
-An advance Administration bot based on yagop/telegram-bot 
+    about_text = [[👑 Signal Bot 👑
+An advanced administration bot based on TG-CLI written in Lua
 
-https://github.com/amirhossein99/PSbot
+🔰 Github 🔰
+https://github.com/SIGNALTEAM/SignalTG.git
 
-Our team!
-Developers:
-@Amir_Anonymous
-@Crazy_Sudo
-Supporter:
-@MrOmidBalooch
+Admins:
+🔥 @Amir_Anonymous [Founder & Developer] 🔥
 
 
-Our channel:
+Special thanks to
+SEEDTEAM
+
+Our channels
 @PowerSpeed_Ch
 ]],
     help_text_realm = [[
 Realm Commands:
 
-!creategroup [name]
-Create a group
-
-!createrealm [name]
-Create a realm
-
-!setname [name]
-Set realm name
-
-!setabout [group_id] [text]
-Set a group's about text
-
-!setrules [grupo_id] [text]
-Set a group's rules
-
-!lock [grupo_id] [setting]
-Lock a group's setting
-
-!unlock [grupo_id] [setting]
-Unock a group's setting
-
+!creategroup [Name]
+🔵 ساختن گروه 🔴
+〰〰〰〰〰〰〰〰
+!createrealm [Name]
+🔵 ساختن مقرفرماندهی 🔴
+〰〰〰〰〰〰〰〰
+!setname [Name]
+🔵 عوض کردن اسم مقرفرماندهی 🔴
+〰〰〰〰〰〰〰〰
+!setabout [group|sgroup] [GroupID] [Text]
+🔵 عوض کردن متن درباره ی گروه یا سوپرگروه 🔴
+〰〰〰〰〰〰〰〰
+!setrules [GroupID] [Text]
+🔵 قانونگذاری برای یک گروه 🔴
+〰〰〰〰〰〰〰〰
+!lock [GroupID] [setting]
+🔵 قفل کردن تنظیمات یک گروه 🔴
+〰〰〰〰〰〰〰〰
+!unlock [GroupID] [setting]
+🔵 باز کردن تنظیمات یک گروه 🔴
+〰〰〰〰〰〰〰〰
+!settings [group|sgroup] [GroupID]
+🔵 مشاهده تنظیمات یک گروه یا سوپرگروه 🔴
+〰〰〰〰〰〰〰〰
 !wholist
-Get a list of members in group/realm
-
+🔵 مشاهده لیست اعضای گروه یا مقرفرماندهی 🔴
+〰〰〰〰〰〰〰〰
 !who
-Get a file of members in group/realm
-
+🔵 دریافت فایل اغضای گروه یا مقرفرماندهی 🔴
+〰〰〰〰〰〰〰〰
 !type
-Get group type
-
-!kill chat [grupo_id]
-Kick all memebers and delete group
-
-!kill realm [realm_id]
-Kick all members and delete realm
-
+🔵 مشاهده ی نوع گروه 🔴
+〰〰〰〰〰〰〰〰
+!kill chat [GroupID]
+🔵 پاک کردن یک گروه و اعضای آن 🔴
+〰〰〰〰〰〰〰〰
+!kill realm [RealmID]
+🔵 پاک کردن یک مقرفرماندهی و اعضای آن 🔴
+〰〰〰〰〰〰〰〰
 !addadmin [id|username]
-Promote an admin by id OR username *Sudo only
-
+🔵 ادمین کردن یک شخص در ربات (فقط برای سودو) 🔴
+〰〰〰〰〰〰〰〰
 !removeadmin [id|username]
-Demote an admin by id OR username *Sudo only
-
+🔵 پاک کردن یک شخص از ادمینی در ربات (فقط برای سودو) 🔴
+〰〰〰〰〰〰〰〰
 !list groups
-Get a list of all groups
-
+🔵 مشهاده لیست گروه های ربات به همراه لینک آنها 🔴
+〰〰〰〰〰〰〰〰
 !list realms
-Get a list of all realms
-
+🔵 مشاهده لیست مقرهای فرماندهی به همراه لینک آنها 🔴
+〰〰〰〰〰〰〰〰
+!support
+🔵 افزودن شخص به پشتیبانی 🔴
+〰〰〰〰〰〰〰〰
+!-support
+🔵 پاک کردن شخص از پشتیبانی 🔴
+〰〰〰〰〰〰〰〰
 !log
-Get a logfile of current group or realm
-
+🔵 دریافت ورود اعضا به گروه یا مقرفرماندهی 🔴
+〰〰〰〰〰〰〰〰
 !broadcast [text]
 !broadcast Hello !
-Send text to all groups
-» Only sudo users can run this command
-
+🔵 ارسال متن به همه گروه های ربات (فقط مخصوص سودو) 🔴
+〰〰〰〰〰〰〰〰
 !bc [group_id] [text]
 !bc 123456789 Hello !
-This command will send text to [group_id]
-
-» U can use both "/" and "!" 
-
-» Only mods, owner and admin can add bots in group
-
-» Only moderators and owner can use kick,ban,unban,newlink,link,setphoto,setname,lock,unlock,set rules,set about and settings commands
-
-» Only owner can use res,setowner,promote,demote and log commands
-
+🔵 ارسال متن به یک گروه مشخص 🔴
+〰〰〰〰〰〰〰〰
+💥 شما میتوانید از / و ! و # استفاده کنید 💥
 ]],
     help_text = [[
 Commands list :
 
 !kick [username|id]
-You can also do it by reply
-
+🔵 اخراج شخص از گروه 🔴
+〰〰〰〰〰〰〰〰
 !ban [ username|id]
-You can also do it by reply
-
+🔵 مسدود کردن شخص از گروه 🔴
+〰〰〰〰〰〰〰〰
 !unban [id]
-You can also do it by reply
-
+🔵 خارج کردن فرد از لیست مسدودها 🔴
+〰〰〰〰〰〰〰〰
 !who
-Members list
-
+🔵 لیست اعضای گروه 🔴
+〰〰〰〰〰〰〰〰
 !modlist
-Moderators list
-
+🔵 لیست مدیران 🔴
+〰〰〰〰〰〰〰〰
 !promote [username]
-Promote someone
-
+🔵 افزودن شخص به لیست مدیران 🔴
+〰〰〰〰〰〰〰〰
 !demote [username]
-Demote someone
-
+🔵 خارج کردن شخص از لیست مدیران 🔴
+〰〰〰〰〰〰〰〰
 !kickme
-Will kick user
-
+🔵 اخراج خود از گروه 🔴
+〰〰〰〰〰〰〰〰
 !about
-Group description
-
+🔵 دریافت متن گروه 🔴
+〰〰〰〰〰〰〰〰
 !setphoto
-Set and locks group photo
-
+🔵 عوض کردن عکس گروه 🔴
+〰〰〰〰〰〰〰〰
 !setname [name]
-Set group name
-
+🔵 عوض کردن اسم گروه 🔴
+〰〰〰〰〰〰〰〰
 !rules
-Group rules
-
+🔵 دریافت قوانین گروه 🔴
+〰〰〰〰〰〰〰〰
 !id
-Return group id or user id
-
+🔵 دریافت آیدی گروه یا شخص 🔴
+〰〰〰〰〰〰〰〰
 !help
-Get commands list
-
-!lock [member|name|bots|leave] 
-Locks [member|name|bots|leaveing] 
-
-!unlock [member|name|bots|leave]
-Unlocks [member|name|bots|leaving]
-
-!set rules [text]
-Set [text] as rules
-
-!set about [text]
-Set [text] as about
-
+🔵 دریافت لیست دستورات 🔴
+〰〰〰〰〰〰〰〰
+!lock [links|flood|spam|Arabic|member|rtl|sticker|contacts|strict]
+🔵 قفل کردن تنظیمات 🔴
+〰〰〰〰〰〰〰〰
+!unlock [links|flood|spam|Arabic|member|rtl|sticker|contacts|strict]
+🔵 بازکردن قفل تنظیمات گروه 🔴
+〰〰〰〰〰〰〰〰
+!mute [all|audio|gifs|photo|video]
+🔵 بیصدا کردن فرمت ها 🔴
+〰〰〰〰〰〰〰〰
+!unmute [all|audio|gifs|photo|video]
+🔵 از حالت بیصدا درآوردن فرمت ها 🔴
+〰〰〰〰〰〰〰〰
+!set rules <text>
+🔵 تنظیم قوانین برای گروه 🔴
+〰〰〰〰〰〰〰〰
+!set about <text>
+🔵 تنظیم متن درباره ی گروه 🔴
+〰〰〰〰〰〰〰〰
 !settings
-Returns group settings
-
+🔵 مشاهده تنظیمات گروه 🔴
+〰〰〰〰〰〰〰〰
+!muteslist
+🔵 لیست فرمت های بیصدا 🔴
+〰〰〰〰〰〰〰〰
+!muteuser [username]
+🔵 بیصدا کردن شخص در گروه 🔴
+〰〰〰〰〰〰〰〰
+!mutelist
+🔵 لیست افراد بیصدا 🔴
+〰〰〰〰〰〰〰〰
 !newlink
-Create/revoke your group link
-
+🔵 ساختن لینک جدید 🔴
+〰〰〰〰〰〰〰〰
 !link
-Returns group link
-
+🔵 دریافت لینک گروه 🔴
+〰〰〰〰〰〰〰〰
 !owner
-Returns group owner id
-
+🔵 مشاهده آیدی صاحب گروه 🔴
+〰〰〰〰〰〰〰〰
 !setowner [id]
-Will set id as owner
-
+🔵 یک شخص را به عنوان صاحب گروه انتخاب کردن 🔴
+〰〰〰〰〰〰〰〰
 !setflood [value]
-Set [value] as flood sensitivity
-
+🔵 تنظیم حساسیت اسپم 🔴
+〰〰〰〰〰〰〰〰
 !stats
-Simple message statistics
-
-!save [value] [text]
-Save [text] as [value]
-
+🔵 مشاهده آمار گروه 🔴
+〰〰〰〰〰〰〰〰
+!save [value] <text>
+🔵 افزودن دستور و پاسخ 🔴
+〰〰〰〰〰〰〰〰
 !get [value]
-Returns text of [value]
-
+🔵 دریافت پاسخ دستور 🔴
+〰〰〰〰〰〰〰〰
 !clean [modlist|rules|about]
-Will clear [modlist|rules|about] and set it to nil
-
+🔵 پاک کردن [مدیران ,قوانین ,متن گروه] 🔴
+〰〰〰〰〰〰〰〰
 !res [username]
-Returns user id
-
+🔵 دریافت آیدی افراد 🔴
+💥 !res @username 💥
+〰〰〰〰〰〰〰〰
 !log
-Will return group logs
-
+🔵 لیست ورود اعضا 🔴
+〰〰〰〰〰〰〰〰
 !banlist
-Will return group ban list
+🔵 لیست مسدود شده ها 🔴
+〰〰〰〰〰〰〰〰
+💥 شما میتوانید از / و ! و # استفاده کنید 💥
+]],
+	help_text_super =[[
+SuperGroup Commands:
 
-» U can use both "/" and "!" 
-
-» Only mods, owner and admin can add bots in group
-
-» Only moderators and owner can use kick,ban,unban,newlink,link,setphoto,setname,lock,unlock,set rules,set about and settings commands
-
-» Only owner can use res,setowner,promote,demote and log commands
-
-]]
+!gpinfo
+🔵 دریافت اطلاعات سوپرگروه 🔴
+!admins
+🔵 دریافت لیست ادمین های سوپرگروه 🔴
+!owner
+🔵 مشاهده آیدی صاحب گروه 🔴
+!modlist
+🔵 مشاهده لیست مدیران 🔴
+!bots
+🔵 مشهاده لیست بات های موجود در سوپرگروه 🔴
+!who
+🔵 مشاهده لیست کل اعضای سوپرگروه 🔴
+!block
+🔵 اخراج شخص از سوپرگروه 🔴
+!kick
+🔵 اخراج شخص از سوپرگروه 🔴
+!ban
+🔵 مسدود کردن شخص از سوپرگروه 🔴
+!unban
+🔵 خارج کردن شخص از لیست مسدودها 🔴
+!id
+🔵 مشاهده آیدی سوپرگروه یا شخص 🔴
+!id from
+🔵 گرفتن آیدی شخصی که از او فوروارد شده است 🔴
+!kickme
+🔵 اخراج خود از سوپرگروه 🔴
+!setowner
+🔵 یک شخص را به عنوان صاحب گروه انتخاب کردن 🔴
+!promote [username|id]
+🔵 افزودن یک شخص به لیست مدیران 🔴
+!demote [username|id]
+🔵 پاک کردن یک شخص از لیست مدیران 🔴
+!setname
+🔵 عوض کردن اسم گروه 🔴
+!setphoto
+🔵 عوض کردن عکس گروه 🔴
+!setrules
+🔵 قانونگذاری برای گروه 🔴
+!setabout
+🔵 عوض کردن متن درباره ی گروه 🔴
+!save [value] <text>
+🔵 افزودن دستور و پاسخ 🔴
+!get [value]
+🔵 دریافت پاسخ دستور 🔴
+!newlink
+🔵 ساختن لینک جدید 🔴
+!link
+🔵 دریافت لینک گروه 🔴
+!rules
+🔵 دریافت قوانین گروه 🔴
+!lock [links|flood|spam|Arabic|member|rtl|sticker|contacts|strict|tag|username|fwd|reply|fosh|tgservice|leave|join|emoji|english|media|operator]
+🔵 قفل کردن تنظیمات 🔴
+!unlock [links|flood|spam|Arabic|member|rtl|sticker|contacts|strict|tag|username|fwd|reply|fosh|tgservice|leave|join|emoji|english|media|operator]
+🔵 بازکردن قفل تنظیمات گروه 🔴
+!mute [all|audio|gifs|photo|video|service]
+🔵 بیصدا کردن فرمت ها 🔴
+!unmute [all|audio|gifs|photo|video|service]
+🔵 از حالت بیصدا خارج کردن فرمت ها 🔴
+!setflood [value]
+🔵 تنظیم حساسیت اسپم 🔴
+!type [name]
+🔵 تنظیم نوع گروه 🔴
+!settings
+🔵 مشاهده تنظیمات گروه 🔴
+!mutelist
+🔵 لیست افراد بیصدا 🔴
+!silent [username]
+🔵 بیصدا کردن شخص در گروه 🔴
+!silentlist
+🔵 لیست افراد بیصدا 🔴
+!banlist
+🔵 مشاهده لیست مسدود شده ها 🔴
+!clean [rules|about|modlist|silentlist|badwords]
+🔵 پاک کردن [مدیران ,قوانین ,متن گروه,لیست بیصداها, لیست کلمات غیرمجاز] 🔴
+!del
+🔵 پاک کردن پیام با ریپلی 🔴
+!addword [word]
+🔵 افزودن کلمه به لیست کلمات غیرمجاز🔴
+!remword [word]
+🔵 پاک کردن کلمه از لیست کلمات غیرمجاز 🔴
+!badwords
+🔵 مشاهده لیست کلمات غیرمجاز 🔴
+!clean msg [value]
+🔵 پاک کردن تعداد پیام مورد نظر 🔴
+!public [yes|no]
+🔵 همگانی کردن گروه 🔴
+!res [username]
+🔵 به دست آوردن آیدی یک شخص 🔴
+!log
+🔵 لیست ورود اعضا 🔴
+〰〰〰〰〰〰〰〰
+💥 شما میتوانید از / و ! و # استفاده کنید 💥
+💥 برای افزودن سازنده روبات به گروه استفاده کنند !invpouria صاحبان گروه میتونند از دستور 💥
+]],
   }
   serialize_to_file(config, './data/config.lua')
   print('saved config into ./data/config.lua')
@@ -460,7 +568,7 @@ function on_user_update (user, what)
 end
 
 function on_chat_update (chat, what)
-
+  --vardump (chat)
 end
 
 function on_secret_chat_update (schat, what)
@@ -482,13 +590,12 @@ function load_plugins()
 
     if not ok then
       print('\27[31mError loading plugin '..v..'\27[39m')
-      print(tostring(io.popen("lua plugins/"..v..".lua"):read('*all')))
+	  print(tostring(io.popen("lua plugins/"..v..".lua"):read('*all')))
       print('\27[31m'..err..'\27[39m')
     end
 
   end
 end
-
 
 -- custom add
 function load_data(filename)
@@ -513,6 +620,7 @@ function save_data(filename, data)
 	f:close()
 
 end
+
 
 -- Call and postpone execution for cron plugins
 function cron_plugins()
