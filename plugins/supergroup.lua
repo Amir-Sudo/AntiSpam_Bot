@@ -587,8 +587,12 @@ local function unlock_group_reply(msg, data, target)
   end
 end
 
+local function lock_group_audio(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
 local group_audio_lock = data[tostring(target)]['settings']['lock_audio']
-  if group_reply_lock == 'yes' then
+  if group_audio_lock == 'yes' then
     return '🔐قـفـل صــدا در سـوپـرگـروه از قـبـل فـعـال بـود🔒'
   else
     data[tostring(target)]['settings']['lock_audio'] = 'yes'
@@ -597,6 +601,10 @@ local group_audio_lock = data[tostring(target)]['settings']['lock_audio']
   end
 end
 
+local function unlock_group_audio(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
  local group_audio_lock = data[tostring(target)]['settings']['lock_audio']
   if group_audio_lock == 'no' then
     return '🔓قـفـل صــدا در سـوپـرگـروه از قـبـل غـیـرفـعـال بـود🔓'
@@ -607,6 +615,10 @@ end
   end
 end
 
+local function lock_group_operator(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
 local group_operator_lock = data[tostring(target)]['settings']['lock_operator']
   if group_operator_lock == 'yes' then
     return '🔐قـفـل اوپـراتـور در سـوپـرگـروه از قـبـل فـعـال بـود🔒'
@@ -617,6 +629,10 @@ local group_operator_lock = data[tostring(target)]['settings']['lock_operator']
   end
 end
 
+local function unlock_group_operator(msg, data, target)
+  if not is_momod(msg) then
+    return
+  end
 local group_operator_lock = data[tostring(target)]['settings']['lock_operator']
   if group_operator_lock == 'no' then
     return '🔓قـفـل اوپـراتـور در سـوپـرگـروه از قـبـل غـیـرفـعـال بـود🔓'
@@ -824,8 +840,8 @@ end
 		end
 	end
   local settings = data[tostring(target)]['settings']
-  local text = " ⚙تنظیمات فارسی سوپرگروه\n\🔵🔴🔵🔴🔵🔴🔵🔴🔵🔴n🔹وضعیت لینک💠:"..settings.lock_link.."\n🔹وضعیت فلود🔱:"..settings.flood.."\n🔹وضعیت تعداد فلود🔢:"..NUM_MSG_MAX.."\n🔹وضعیت اسپم⚠️:"..settings.lock_spam.."\n🔹وضعیت آر تی ال➿:"..settings.lock_rtl.."\n🔹وضعیت تی جی سرویس🔰:"..settings.lock_tgservice.."\n🔹وضعیت ممبر👥:"..settings.lock_member.." \n🔹وضعیت پابلیک/جهانی🌐:"..settings.public.."\n🔹وضعیت سختگیرانه♨️:"..settings.strict.."\n⚪️⚫️⚪️⚫️⚪️⚫️⚪️⚫️⚪️⚫️\n⚙تنظیمات قفل های اصلی سوپرگروه⚙\n🔸وضعیت استیکر🌈:"..settings.lock_sticker.."\n🔸وضعیت فایل📥:"..settings.lock_spam.."\n🔸وضعیت ویدئو🎥:"..settings.lock_video.."\n🔸وضعیت ایموجی😐:"..settings.lock_emoji.."\n🔸وضعیت فحش🚫:"..settings.lock_spam..."\n🔸وضعیت ریپلیℹ️:"..settings.lock_reply.."\n🔸وضعیت فروارد🔄:"..settings.lock_fwd.."\n🔸وضعیت دستورات🔣:"..settings.lock_commands.."\n🔸وضعیت هشتگ#⃣:"..settings.lock_hashtag.."\n🔸وضعیت صدا🎵:"..settings.lock_audio.."\n🔸وضعیت کانتکت📞:"...settings.lock_contacts.."\n🔸وضعیت اوپراتور💳:"..settings.lock_operator.."\n🔸وضعیت عدد🔢:"..settings.lock_number.."\nقفل زبان ها:
-🔴وضعیت زبان عربی👳🏾:"..settings.lock_arabic.."\n🔵وضعیت زبان انگلیسی👱🏻:"..settings.lock_english.."\n\n⭕️اطلاعات شما و گروه⭕️\n▪️ایدی شما◀️"..msg.from.id.."/n▪️نام سوپرگروه◀️"..msg.to.print_name.."▪️ایدی سوپرگروه◀️"..msg.to.id.."\n\n 🔱 @PowerSpeed_Ch 🔱
+  local text = "\nتنظیمات فارسی سوپرگروه\n\🔵🔴🔵🔴🔵🔴🔵🔴🔵🔴n🔹وضعیت لینک💠:"..settings.lock_link.."\n🔹وضعیت فلود🔱:"..settings.flood.."\n🔹وضعیت تعداد فلود🔢:"..NUM_MSG_MAX.."\n🔹وضعیت اسپم⚠️:"..settings.lock_spam.."\n🔹وضعیت آر تی ال➿:"..settings.lock_rtl.."\n🔹وضعیت تی جی سرویس🔰:"..settings.lock_tgservice.."\n🔹وضعیت ممبر👥:"..settings.lock_member.." \n🔹وضعیت پابلیک/جهانی🌐:"..settings.public.."\n🔹وضعیت سختگیرانه♨️:"..settings.strict.."\n⚪️⚫️⚪️⚫️⚪️⚫️⚪️⚫️⚪️⚫️\n⚙تنظیمات قفل های اصلی سوپرگروه⚙\n🔸وضعیت استیکر🌈:"..settings.lock_sticker.."\n🔸وضعیت فایل📥:"..settings.lock_spam.."\n🔸وضعیت ویدئو🎥:"..settings.lock_video.."\n🔸وضعیت ایموجی😐:"..settings.lock_emoji.."\n🔸وضعیت فحش🚫:"..settings.lock_spam.."\n🔸وضعیت ریپلیℹ️:"..settings.lock_reply.."\n🔸وضعیت فروارد🔄:"..settings.lock_fwd.."\n🔸وضعیت دستورات🔣:"..settings.lock_commands.."\n🔸وضعیت هشتگ#⃣:"..settings.lock_hashtag.."\n🔸وضعیت صدا🎵:"..settings.lock_audio.."\n🔸وضعیت کانتکت📞:"..settings.lock_contacts.."\n🔸وضعیت اوپراتور💳:"..settings.lock_operator.."\n🔸وضعیت عدد🔢:"..settings.lock_number.."\nقفل زبان ها:
+🔴وضعیت زبان عربی👳🏾:"..settings.lock_arabic.."\n🔵وضعیت زبان انگلیسی👱🏻:"..settings.lock_english.."\n\n⭕️اطلاعات شما و گروه⭕️\n▪️ایدی شما◀️"..msg.from.id.."/n▪️نام سوپرگروه◀️"..msg.to.print_name.."▪️ایدی سوپرگروه◀️"..msg.to.id.."\n\n 🔱  @PowerSpeed_Ch🔱" 
   return text
 end
 
