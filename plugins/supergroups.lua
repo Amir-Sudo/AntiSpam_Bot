@@ -2115,16 +2115,6 @@ local function run(msg, matches)
 					return "SuperGroup mute "..msg_type.." is already on"
 				end
 			end
-			if matches[2] == 'video' then
-			local msg_type = 'Video'
-				if not is_muted(chat_id, msg_type..': yes') then
-					savelog(msg.to.id, name_log.." ["..msg.from.id.."] set SuperGroup to: mute "..msg_type)
-					mute(chat_id, msg_type)
-					return msg_type.." has been muted"
-				else
-					return "SuperGroup mute "..msg_type.." is already on"
-				end
-			end
 			if matches[2] == 'gifs' then
 			local msg_type = 'Gifs'
 				if not is_muted(chat_id, msg_type..': yes') then
@@ -2184,16 +2174,6 @@ local function run(msg, matches)
 					savelog(msg.to.id, name_log.." ["..msg.from.id.."] set SuperGroup to: unmute "..msg_type)
 					unmute(chat_id, msg_type)
 					return msg_type.." has been unmuted"
-				else
-					return "Mute "..msg_type.." is already off"
-				end
-			end
-			if matches[2] == 'video' then
-			local msg_type = 'Video'
-				if is_muted(chat_id, msg_type..': yes') then
-					savelog(msg.to.id, name_log.." ["..msg.from.id.."] set SuperGroup to: unmute "..msg_type)
-					unmute(chat_id, msg_type)
-					return msg_type.." has been unmuted"m
 				else
 					return "Mute "..msg_type.." is already off"
 				end
@@ -2420,7 +2400,6 @@ return {
 	"msg.to.peer_id",
 	"%[(document)%]",
 	"%[(photo)%]",
-	"%[(video)%]",
 	"%[(audio)%]",
 	"%[(contact)%]",
 	"^!!tgservice (.+)$",
